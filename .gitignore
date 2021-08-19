@@ -1,0 +1,7 @@
+explorations/
+*.aux
+*.log
+*.gz
+*.toc
+*.fls
+*.fdb_latexmk

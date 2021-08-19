@@ -1,0 +1,72 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{fullpage,graphicx,psfrag,amsmath,amsfonts}
+\usepackage[small,bf]{caption}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{lipsum}
+\usepackage{url}
+\usepackage{bm}
+\usepackage{float}
+\usepackage[p,osf]{cochineal}
+\usepackage[varqu,varl,var0]{inconsolata}
+\usepackage[scale=.95,type1]{cabin}
+\usepackage[cochineal,vvarbb]{newtxmath}
+\usepackage[cal=boondoxo]{mathalfa}
+\usepackage{enumitem}
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
+\begin{document}
+\author{Filippo Grotto VR460638}
+
+\title{Fetal Health Classification  \\[1ex] \large Machine Learning and Artificial Intelligence \\[1ex] \large Academic year 2020/2021}
+
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Motivation and rationale}
+This project is heavily inspired by a kaggle task \cite{kaggle} about fetal health classification.
+\begin{quote}
+Reduction of child mortality is reflected in several of the United Nations' Sustainable Development Goals and is a key indicator of human progress.
+The UN expects that by 2030, countries end preventable deaths of newborns and children under 5 years of age, with all countries aiming to reduce under‑5 mortality to at least as low as 25 per 1,000 live births.
+
+Parallel to notion of child mortality is of course maternal mortality, which accounts for 295 000 deaths during and following pregnancy and childbirth (as of 2017). The vast majority of these deaths (94\%) occurred in low-resource settings, and most could have been prevented.
+
+In light of what was mentioned above, Cardiotocograms (CTGs) are a simple and cost accessible option to assess fetal health, allowing healthcare professionals to take action in order to prevent child and maternal mortality. The equipment itself works by sending ultrasound pulses and reading its response, thus shedding light on fetal heart rate (FHR), fetal movements, uterine contractions and more.
+\end{quote}
+In this context this project is not only an application of machine learning techniques but it also have some meaningful application into real world scenarios thanks to the real data provided.
+
+
+\section{Problem definition and Dataset}
+The dataset comes from UCI Machine Learning Repository \cite{uci} and it is composed by 
+\begin{quote}
+2126 fetal cardiotocograms (CTGs) automatically processed with the respective diagnostic features measured. The CTGs are were classified by three expert obstetricians and a consensus classification label assigned to each of them. Classification was both with respect to a morphologic pattern (A, B, C. ...) and to a fetal state (N=normal; S=suspect; P=pathologic). Therefore the dataset can be used either for 10-class or 3-class experiments.
+\end{quote}
+We will address the 3-class classification problem so we will try to classify the data according to normal, suspect or pathologic.
+
+\subsection{Feature Extraction}
+\section{Experiments and Results}
+
+
+% \begin{figure}[H]
+% \begin{center}
+% \includegraphics[width=0.9\textwidth]{images/.png}
+% \end{center}
+% \caption{}
+% \end{figure}
+
+\begin{thebibliography}{9}
+
+\bibitem{cardio}
+Ayres de Campos et al. (2000) SisPorto 2.0 A Program for Automated Analysis of Cardiotocograms
+
+\bibitem{kaggle}
+Fetal Health Classification https://www.kaggle.com/andrewmvd/fetal-health-classification
+
+\bibitem{uci}
+Cardiocotography dataset https://archive.ics.uci.edu/ml/datasets/cardiotocography
+
+\end{thebibliography}
+\end{document}
