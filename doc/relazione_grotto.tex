@@ -21,8 +21,6 @@
 \title{Fetal Health Classification  \\[1ex] \large Machine Learning and Artificial Intelligence \\[1ex] \large Academic year 2020/2021}
 
 \maketitle
-\newpage
-
 \tableofcontents
 \newpage
 
@@ -46,8 +44,19 @@ The dataset comes from UCI Machine Learning Repository \cite{uci} and it is comp
 \end{quote}
 We will address the 3-class classification problem so we will try to classify the data according to normal, suspect or pathologic.
 
-\subsection{Feature Extraction}
+\section{Methodology}
+The classification problem is addressed using the following techniques:
+
+\begin{itemize}
+  \item Naive Bayes \cite{ml}
+  \item SVM (with different kernels linear and RBF ) \cite{ml}
+  \item KNN (with different k based on preliminary analysis) \cite{ml}
+  \item ANN \cite{ann}
+\end{itemize}
+Moreover, PCA and Fisher(LDA) dimensionality reduction techniques are considered as well as the effects of data scaling and/or normalization. We don't expect to see improvements of the state of the art where other techniques (XGBoost, Random forests, Decision tree models) are used.
+
 \section{Experiments and Results}
+\subsection{Dataset exploration}
 
 
 % \begin{figure}[H]
@@ -67,6 +76,12 @@ Fetal Health Classification https://www.kaggle.com/andrewmvd/fetal-health-classi
 
 \bibitem{uci}
 Cardiocotography dataset https://archive.ics.uci.edu/ml/datasets/cardiotocography
+
+\bibitem{ml}
+Hoodbhoy, Zahra et al. “Use of Machine Learning Algorithms for Prediction of Fetal Risk using Cardiotocographic Data.”
+
+\bibitem{ann}
+Yılmaz, E. Fetal State Assessment from Cardiotocogram Data Using Artificial Neural Networks.
 
 \end{thebibliography}
 \end{document}
