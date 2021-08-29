@@ -21,6 +21,7 @@
 \title{Fetal Health Classification  \\[1ex] \large Machine Learning and Artificial Intelligence \\[1ex] \large Academic year 2020/2021}
 
 \maketitle
+\newpage
 \tableofcontents
 \newpage
 
@@ -53,21 +54,145 @@ The classification problem is addressed using the following techniques:
   \item KNN (with different k based on preliminary analysis) \cite{ml}
   \item ANN \cite{ann}
 \end{itemize}
-Moreover, PCA and Fisher(LDA) dimensionality reduction techniques are considered as well as the effects of data scaling and/or normalization. We don't expect to see improvements of the state of the art where other techniques (XGBoost, Random forests, Decision tree models) are used.
+Moreover, PCA and Fisher (LDA) dimensionality reduction techniques are considered as well as the effects of data scaling and/or normalization. We don't expect to see improvements of the state of the art where other techniques (XGBoost, Random forests, Decision tree models) are used.
 
 \section{Experiments and Results}
 \subsection{Dataset exploration}
+The dataset is composed by 2126 entries with 22 features (21 feature + fetal health which is our target for the classification). From a first analysis there are no null or empty values but there are 13 duplications which we dropped. A brief description of the dataset is reported in Fig \ref{fig:features}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1.0\textwidth]{images/features.png}
+\end{center}
+\caption{Description of all feature dataset}
+\label{fig:features}
+\end{figure}
+
+\noindent Another observation to make is the presence of high class imbalance that comes from the real dataset. In Fig \ref{fig:imbalance} it is visible that \textbf{Normal} represents around the 57\% of the entire dataset.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=1.0\textwidth]{images/imbalance.png}
+\end{center}
+\caption{Class imbalance in the dataset, around 57\% is classified as normal fetal health}
+\label{fig:imbalance}
+\end{figure}
+
+\noindent Having verified the presence of class imbalance we will use different performance measures for our models in order to avoid misleading considerations:
+\bigbreak
+\begin{itemize}
+  \item \textbf{Precision}
+  \item \textbf{Accuracy}
+  \item \textbf{Recall}
+  \item \textbf{Confusion Matrix}
+  \item \textbf{F1 Score}
+\end{itemize}
+
+\bigbreak
+\noindent Finally we can analyse the correlation between features of the dataset in order to evaluate a possible subset to improve our performances.
+In Fig \ref{fig:correlation} a heatmap is reported with the correlation between our features. In table \ref{tab:correlation} the features with more than 30\% correlation with \textbf{fetal health} are reported
+
+\begin{table}[H]
+\begin{tabular}{ |p{10cm}||p{3cm}| }
+  \hline
+  Feature Name& Correlation \\
+  \hline
+  accelerations&                                            -0.364066\\
+  prolongued decelerations&                                  0.484859\\
+  abnormal short term variability&                           0.471191\\
+  percentage of time with abnormal long term variability&    0.426146\\
+  \hline
+\end{tabular}
+\caption{Feature with correlation higher than 30\%}
+\label{tab:correlation}
+\end{table}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=1.0\textwidth]{images/correlation.png}
+  \end{center}
+  \caption{Correlation between features}
+  \label{fig:correlation}
+\end{figure}
+
+\noindent As a result the features with high correlation are \textbf{accelerations}, \textbf{prolongued decelerations},\textbf{abnormal short term variability} and \textbf{percentage of time with abnormal long term variability}. They will be considered in a further analysis as a reasonable subset of the dataset to exploit our models.
+
+\subsection{PCA dimensionality reduction}
+In this section both PCA and LDA dimensionality reduction techniques will be considered.
+\bigbreak
+\noindent In Fig \ref{fig:pca} the analysis of PCA dimensionality reduction is considered. In particular the graph rappresents the cumulative explained variation ratio with respect of all the possible components we might want to consider.
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=1.0\textwidth]{images/pca.png}
+  \end{center}
+  \caption{PCA cumulative explained variance ratio wrt of components}
+  \label{fig:pca}
+\end{figure}
+
+\noindent In particular the last five components don't provide much more information (close to zero) and with 8 components we have a rappresentation of around 80\% of our dataset. In table \ref{tab:pca} the results obtained by our models over the 8 components is provided.
+
+\begin{table}[H]
+  \begin{tabular}{ |p{4cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}| }
+    \hline
+    Model& accuracy & precision  &  recall & f1 score \\
+    \hline
+SVM linear&           0.899687&   0.898669&  0.899687&  0.899022\\
+SVM poly   &          0.891850&   0.885607&  0.891850&  0.885699\\
+SVM rbf     &         0.905956&   0.902835&  0.905956&  0.903968\\
+SVM sigmoid  &        0.717868&   0.765628&  0.717868&  0.737608\\
+Gaussian Naive  &        0.862069&   0.865387&  0.862069&  0.861556\\
+Logistic Regression&  0.899687&   0.897470&  0.899687&  0.898194\\
+    \hline
+  \end{tabular}
+  \caption{Evaluation of our models over 8 PCA components}
+  \label{tab:pca}
+  \end{table}
 
 
-% \begin{figure}[H]
-% \begin{center}
-% \includegraphics[width=0.9\textwidth]{images/.png}
-% \end{center}
-% \caption{}
-% \end{figure}
+\subsection{LDA dimensionality reduction}
 
+For LDA (Fisher) both the case with 1 and 2 components is reported in the two tables \ref{tab:lda1} and \ref{tab:lda2}
+\begin{table}[H]
+\begin{tabular}{ |p{4cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}| }
+  \hline
+  Model& accuracy & precision  &  recall & f1 score \\
+  \hline
+  SVM linear&           0.847962&   0.829295&  0.847962&  0.828071\\
+  SVM poly  &           0.841693&   0.820448&  0.841693&  0.802800\\
+  SVM rbf   &           0.846395&   0.832120&  0.846395&  0.836413\\
+  SVM sigmoid &         0.766458&   0.776691&  0.766458&  0.771115\\
+  Gaussian Naive  &        0.854232&   0.847738&  0.854232&  0.850451\\
+  Logistic Regression & 0.844828&   0.828893&  0.844828&  0.832487\\
+  \hline
+\end{tabular}
+\caption{Evaluation of our models with 1 LDA component}
+\label{tab:lda1}
+\end{table}
+
+\begin{table}[H]
+\begin{tabular}{ |p{4cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}| }
+  \hline
+  Model& accuracy & precision  &  recall & f1 score \\
+  \hline
+  SVM linear &          0.898119&   0.898106&  0.898119&  0.898103\\
+  SVM poly   &          0.899687&   0.895180&  0.899687&  0.894518\\
+  SVM rbf    &          0.905956&   0.907072&  0.905956&  0.906281\\
+  SVM sigmoid &         0.689655&   0.725761&  0.689655&  0.704979\\
+  Gaussian Naive &         0.873041&   0.885894&  0.873041&  0.877463\\
+  Logistic Regression&  0.902821&   0.898863&  0.902821&  0.899858\\
+  \hline
+\end{tabular}
+\caption{Evaluation of our models with 2 LDA components}
+\label{tab:lda2}
+\end{table}
+
+
+\noindent In general in case of uniformly distributed data, LDA almost always performs better than PCA. However if the data is highly skewed (irregularly distributed) then it is advised to use PCA since LDA can be biased towards the majority class.
+
+
+\subsection{Model evaluations with the full dataset}
 \begin{thebibliography}{9}
-
 \bibitem{cardio}
 Ayres de Campos et al. (2000) SisPorto 2.0 A Program for Automated Analysis of Cardiotocograms
 
