@@ -8,6 +8,7 @@
 \usepackage{url}
 \usepackage{bm}
 \usepackage{float}
+% \usepackage{mathptmx}
 \usepackage[p,osf]{cochineal}
 \usepackage[varqu,varl,var0]{inconsolata}
 \usepackage[scale=.95,type1]{cabin}
@@ -21,7 +22,6 @@
 \title{Fetal Health Classification  \\[1ex] \large Machine Learning and Artificial Intelligence \\[1ex] \large Academic year 2020/2021}
 
 \maketitle
-\newpage
 \tableofcontents
 \newpage
 
@@ -117,8 +117,27 @@ In Fig \ref{fig:correlation} a heatmap is reported with the correlation between 
 
 \noindent As a result the features with high correlation are \textbf{accelerations}, \textbf{prolongued decelerations},\textbf{abnormal short term variability} and \textbf{percentage of time with abnormal long term variability}. They will be considered in a further analysis as a reasonable subset of the dataset to exploit our models.
 
+\subsection{Data scaling}
+In Fig \ref{fig:notscaled} the original data is reported. It's visible that the data requires a proper scaling to avoid the presence of dominant features that might affect our analysis. In Fig \ref{fig:scaled} the scaled data is reported where \textbf{StandardScaler} was used. Data normalization is not actually reported since from experiments it doesn't provide much more benefits and it's irrelevant for the sake of this report.
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=0.8\textwidth]{images/not_scaledù.png}
+  \end{center}
+  \caption{Plot of the original data without scaling}
+  \label{fig:notscaled}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=0.8\textwidth]{images/scaled.png}
+  \end{center}
+  \caption{Plot of the scaled data}
+  \label{fig:scaled}
+\end{figure}
+
+\newpage
 \subsection{PCA dimensionality reduction}
-In this section both PCA and LDA dimensionality reduction techniques will be considered.
 \bigbreak
 \noindent In Fig \ref{fig:pca} the analysis of PCA dimensionality reduction is considered. In particular the graph rappresents the cumulative explained variation ratio with respect of all the possible components we might want to consider.
 
@@ -130,10 +149,10 @@ In this section both PCA and LDA dimensionality reduction techniques will be con
   \label{fig:pca}
 \end{figure}
 
-\noindent In particular the last five components don't provide much more information (close to zero) and with 8 components we have a rappresentation of around 80\% of our dataset. In table \ref{tab:pca} the results obtained by our models over the 8 components is provided.
+\noindent In particular the last five components don't provide much more information (close to zero) and with 8 components we have a representation of around 80\% of our dataset. In table \ref{tab:pca} the results obtained by our models over the 8 components is provided.
 
 \begin{table}[H]
-  \begin{tabular}{ |p{4cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}| }
+  \begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
     \hline
     Model& accuracy & precision  &  recall & f1 score \\
     \hline
@@ -149,12 +168,23 @@ Logistic Regression&  0.899687&   0.897470&  0.899687&  0.898194\\
   \label{tab:pca}
   \end{table}
 
-
+\newpage
 \subsection{LDA dimensionality reduction}
 
-For LDA (Fisher) both the case with 1 and 2 components is reported in the two tables \ref{tab:lda1} and \ref{tab:lda2}
+In this section a brief analysis of Linear Discriminant Analysis is reported in Fig \ref{fig:lda} where we can easily see that the cumulative variance ratio accumulated with 1 component rappresents more than 80\% of our dataset
+Moreover, both the case with 1 and 2 components are reported in the two tables \ref{tab:lda1} and \ref{tab:lda2}. 
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=0.8\textwidth]{images/lda.png}
+  \end{center}
+  \caption{LDA cumulative explained variance ratio wrt of components}
+  \label{fig:lda}
+\end{figure}
+
+
 \begin{table}[H]
-\begin{tabular}{ |p{4cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}| }
+\begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
   \hline
   Model& accuracy & precision  &  recall & f1 score \\
   \hline
@@ -171,7 +201,7 @@ For LDA (Fisher) both the case with 1 and 2 components is reported in the two ta
 \end{table}
 
 \begin{table}[H]
-\begin{tabular}{ |p{4cm}||p{3cm}|p{3cm}|p{3cm}|p{3cm}| }
+\begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
   \hline
   Model& accuracy & precision  &  recall & f1 score \\
   \hline
@@ -190,8 +220,77 @@ For LDA (Fisher) both the case with 1 and 2 components is reported in the two ta
 
 \noindent In general in case of uniformly distributed data, LDA almost always performs better than PCA. However if the data is highly skewed (irregularly distributed) then it is advised to use PCA since LDA can be biased towards the majority class.
 
-
+\newpage
 \subsection{Model evaluations with the full dataset}
+
+The results of our models are reported in Fig \ref{fig:fulldataset}. It's visible that SVM with rbf kernel produces the best results over our dataset. This is coherent with the analysis in \cite{ml} and what the literature provides us about Support Vector Machines Kernels. Let's consider:
+\bigbreak
+\begin{itemize}
+  \item 1.0 is Normal class
+  \item 2.0 is Suspicious class
+  \item 3.0 is Pathologic class
+\end{itemize} 
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=1.0\textwidth]{images/fulldataset.png}
+  \end{center}
+  \caption{Results of the selected models over our dataset}
+  \label{fig:fulldataset}
+\end{figure}
+
+\noindent From a brief analysis we can clearly see that SVM in general works pretty well over our dataset, Naive Bayes, Logistic Regression and SVM with sigmoid kernel are pretty bad in terms of precision for \textbf{suspicious} and \textbf{pathologic}. In general the class \textbf{Normal} has better performances due to the class imbalance (more than 50\%). Moreover in Fig \ref{fig:confusion_svm} the confusion matrix for the svm with rbf kernel is reported and in Fig \ref{fig:confusion_bayes}. What is clearly visible is the fact that for SVM with rbf there are close to zero false positive and false negative values which is a pretty good result. For Naive Bayes we have a false negative value which is even higher than the true value which is pretty bad for our classification problem.
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=0.8\textwidth]{images/svm_rbf.png}
+  \end{center}
+  \caption{Confusion matrix of SVM with rbf kernel}
+  \label{fig:confusion_svm}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=0.8\textwidth]{images/confusion_naive.png}
+  \end{center}
+  \caption{Confusion matrix of Naive Bayes approach}
+  \label{fig:confusion_bayes}
+\end{figure}
+
+\subsubsection{K-Nearest Neighbors}
+In this section we will consider the use of K-NN applied to our dataset. In Fig \ref{fig:knn} a brief analysis of several k is provided with the related metrics to get an idea of which are the most promising values of K to use.
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=1.0\textwidth]{images/knn.png}
+  \end{center}
+  \caption{K-NN metrics with respect of the value K-neighbors}
+  \label{fig:knn}
+\end{figure}
+
+\noindent As a result the values K = 2 and K = 4 are the best choices which is very close to what the literature provides use which is $\sqrt{N}$ where $N$ is the number of features. In this case $\sqrt{21} = 4.6$ which is pretty close to what we get from the practical analysis. In Fig \ref{fig:knnres} the two best cases are considered and analysed.
+
+\begin{table}[H]
+\begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
+  \hline
+  Model& accuracy & precision  &  recall & f1 score \\
+  \hline
+  K-NN with k=2 &          0.90&   0.90&  0.90&  0.89\\
+  K-NN with k=4   &          0.91&   0.91&  0.91&  0.91\\
+  \hline
+\end{tabular}
+\caption{Evaluation of K-NN models}
+\label{tab:knnres}
+\end{table}
+
+\noindent As a conclusion K-NN with k=4 together with SVM with rbf kernel are a great model for our analysis
+
+\subsubsection{Artificial Neural Networks MLP}
+
+
+
+
+
 \begin{thebibliography}{9}
 \bibitem{cardio}
 Ayres de Campos et al. (2000) SisPorto 2.0 A Program for Automated Analysis of Cardiotocograms
