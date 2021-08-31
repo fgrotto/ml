@@ -6,10 +6,12 @@
 \usepackage[english]{babel}
 \usepackage{lipsum}
 \usepackage{url}
+\usepackage{fancyvrb}
 \usepackage{bm}
 \usepackage{float}
 % \usepackage{mathptmx}
 \usepackage[p,osf]{cochineal}
+\usepackage{listings}
 \usepackage[varqu,varl,var0]{inconsolata}
 \usepackage[scale=.95,type1]{cabin}
 \usepackage[cochineal,vvarbb]{newtxmath}
@@ -223,6 +225,7 @@ Moreover, both the case with 1 and 2 components are reported in the two tables \
 \newpage
 \subsection{Model evaluations with the full dataset}
 
+In this section the evaluations of several models are presented. For all of the the dataset has been divided using $train\_test\_split$ function from sklearn using around 30\% of the entire dataset for the testing set. 
 The results of our models are reported in Fig \ref{fig:fulldataset}. It's visible that SVM with rbf kernel produces the best results over our dataset. This is coherent with the analysis in \cite{ml} and what the literature provides us about Support Vector Machines Kernels. Let's consider:
 \bigbreak
 \begin{itemize}
@@ -268,7 +271,7 @@ In this section we will consider the use of K-NN applied to our dataset. In Fig 
   \label{fig:knn}
 \end{figure}
 
-\noindent As a result the values K = 2 and K = 4 are the best choices which is very close to what the literature provides use which is $\sqrt{N}$ where $N$ is the number of features. In this case $\sqrt{21} = 4.6$ which is pretty close to what we get from the practical analysis. In Fig \ref{fig:knnres} the two best cases are considered and analysed.
+\noindent As a result the values K = 2 and K = 4 are the best choices which is very close to what the literature provides use which is $\sqrt{N}$ where $N$ is the number of features. In this case $\sqrt{21} = 4.6$ which is pretty close to what we get from the practical analysis. In Table \ref{tab:knnres} the two best cases are considered and analysed.
 
 \begin{table}[H]
 \begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
@@ -283,13 +286,58 @@ In this section we will consider the use of K-NN applied to our dataset. In Fig 
 \label{tab:knnres}
 \end{table}
 
-\noindent As a conclusion K-NN with k=4 together with SVM with rbf kernel are a great model for our analysis
+\noindent As a conclusion K-NN with k=4 or k=2 are great models for our analysis
 
+\newpage
 \subsubsection{Artificial Neural Networks MLP}
+In this section we will brief provide some results obtained by using Artificial Neural Networks to solve the classification problem. In particular we created a multilayer perceptron (MLP) with the following parameters
+\begin{Verbatim}[fontsize=\small]
+input_size = 21
+hidden_size = 100
+num_classes = 3
+num_epochs = 100
+batch_size = 50
+learning_rate = 0.001
+\end{Verbatim} 
 
+\begin{Verbatim}[fontsize=\small]
+# Fully connected neural network with one hidden layer
+class NeuralNet(nn.Module):
+  def __init__(self, input_size, hidden_size, num_classes):
+      super(NeuralNet, self).__init__()
+      self.fc1 = nn.Linear(input_size, hidden_size) 
+      self.relu = nn.ReLU()
+      self.fc2 = nn.Linear(hidden_size, num_classes)  
+  
+  def forward(self, x):
+      out = self.fc1(x)
+      out = self.relu(out)
+      out = self.fc2(out)
+      return out
+\end{Verbatim}
 
+\noindent The MLP uses one fully connected layer, a ReLU as activation function and another fully connected layer (Linear). This models proved to have an accuracy around 91\% which makes it a good model for the classification task. In Fig \ref{fig:anntrain} the train accuracies and losses are reported.
 
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=0.6\textwidth]{images/ann_train.png}
+  \end{center}
+  \caption{Accuracy and losses of the MLP}
+  \label{fig:anntrain}
+\end{figure}
 
+\subsubsection{Convolutional Neural Network CNN}
+In this section the use of CNN for solving the classification problem is brief introduced 
+
+\subsection{Other Exploratory Tasks}
+
+\subsubsection{Models evaluation using a subset of features}
+
+\subsubsection{Clustering Problem}
+
+\subsubsection{Semisupervised Problem}
+
+\section{Conclusion}
 
 \begin{thebibliography}{9}
 \bibitem{cardio}
