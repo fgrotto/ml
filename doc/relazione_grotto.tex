@@ -261,7 +261,7 @@ The results of our models are reported in Fig \ref{fig:fulldataset}. It's visibl
 \end{figure}
 
 \subsubsection{K-Nearest Neighbors}
-In this section we will consider the use of K-NN applied to our dataset. In Fig \ref{fig:knn} a brief analysis of several k is provided with the related metrics to get an idea of which are the most promising values of K to use.
+In this section we will consider the use of K-NN (with an euclidean distance applied) to our dataset. In Fig \ref{fig:knn} a brief analysis of several k is provided with the related metrics to get an idea of which are the most promising values of K to use.
 
 \begin{figure}[H]
   \begin{center}
@@ -333,11 +333,30 @@ In this section the use of CNN for solving the classification problem is brief i
 
 \subsubsection{Models evaluation using a subset of features}
 
-\subsubsection{Clustering Problem}
+In this section an evaluation of our models over a subset of features defined in the previous section is presented. Only features with more than 30\% correlation with the target \textbf{fetal health} are used. They are reported in Table \ref{tab:correlation}. In Table \ref{tab:subset} the evaluation of our models is reported according to the defined metrics
+
+\begin{table}[H]
+\begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
+  \hline
+  Model& accuracy & precision  &  recall & f1 score \\
+  \hline
+  SVM linear &          0.85&   0.85&  0.84&  0.85\\
+  SVM poly   &          0.90&   0.90&  0.90&  0.90\\
+  SVM rbf    &          0.88&   0.88&  0.88&  0.88\\
+  SVM sigmoid &         0.82&   0.82&  0.82&  0.82\\
+  Gaussian Naive &         0.84&   0.84&  0.86&  0.84\\
+  Logistic Regression&  0.88&   0.88&  0.88&  0.88\\
+  \hline
+\end{tabular}
+\caption{Evaluation of our models over a subset of features}
+\label{tab:lda2}
+\end{table}
 
 \subsubsection{Semisupervised Problem}
 
 \section{Conclusion}
+
+In this report the study of the classification health of the fetal has been analysed using a real dataset. Several different models have been analysed using different metrics and different dimensionality reduction methodology. It is showed how using SVM with rbf kernel and 17 PCA components produces the best results. Finally, several other classification methods has been exploited and compared using different metrics.
 
 \begin{thebibliography}{9}
 \bibitem{cardio}
