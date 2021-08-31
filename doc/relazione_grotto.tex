@@ -24,6 +24,7 @@
 \title{Fetal Health Classification  \\[1ex] \large Machine Learning and Artificial Intelligence \\[1ex] \large Academic year 2020/2021}
 
 \maketitle
+\newpage
 \tableofcontents
 \newpage
 
@@ -333,7 +334,7 @@ In this section the use of CNN for solving the classification problem is brief i
 
 \subsubsection{Models evaluation using a subset of features}
 
-In this section an evaluation of our models over a subset of features defined in the previous section is presented. Only features with more than 30\% correlation with the target \textbf{fetal health} are used. They are reported in Table \ref{tab:correlation}. In Table \ref{tab:subset} the evaluation of our models is reported according to the defined metrics
+In this section an evaluation of our models over a subset of features defined in the previous section is presented. Only features with more than 30\% correlation with the target \textbf{fetal health} are used. They are reported in Table \ref{tab:correlation}. In Table \ref{tab:subset} the evaluation of our models is reported according to the defined metrics. Moreover, in Fig \ref{fig:poly} the classification report for the best model SVM poly is reported.
 
 \begin{table}[H]
 \begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
@@ -349,8 +350,18 @@ In this section an evaluation of our models over a subset of features defined in
   \hline
 \end{tabular}
 \caption{Evaluation of our models over a subset of features}
-\label{tab:lda2}
+\label{tab:subset}
 \end{table}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=1.0\textwidth]{images/svm_poly.png}
+  \end{center}
+  \caption{Detailed classification report for SVM with polynomial kernel}
+  \label{fig:poly}
+\end{figure}
+
+\noindent Finally it's visible from the report that the class imbalance plays again an important role and the f1-score for the \textbf{Suspicious} class is very low if compared with the other two classes. Anyway we showed how using a lower number of features we are still able to get pretty good results and having a good confusion matrix (very low number of false positive an negative).
 
 \subsubsection{Semisupervised Problem}
 
@@ -358,6 +369,7 @@ In this section an evaluation of our models over a subset of features defined in
 
 In this report the study of the classification health of the fetal has been analysed using a real dataset. Several different models have been analysed using different metrics and different dimensionality reduction methodology. It is showed how using SVM with rbf kernel and 17 PCA components produces the best results. Finally, several other classification methods has been exploited and compared using different metrics.
 
+\newpage
 \begin{thebibliography}{9}
 \bibitem{cardio}
 Ayres de Campos et al. (2000) SisPorto 2.0 A Program for Automated Analysis of Cardiotocograms
