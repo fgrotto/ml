@@ -71,13 +71,13 @@ The dataset is composed by 2126 entries with 22 features (21 feature + fetal hea
 \label{fig:features}
 \end{figure}
 
-\noindent Another observation to make is the presence of high class imbalance that comes from the real dataset. In Fig \ref{fig:imbalance} it is visible that \textbf{Normal} represents around the 57\% of the entire dataset.
+\noindent Another observation to make is the presence of high class imbalance that comes from the real dataset. In Fig \ref{fig:imbalance} it is visible that \textbf{Normal} represents around the 78\% of the entire dataset.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=1.0\textwidth]{images/imbalance.png}
 \end{center}
-\caption{Class imbalance in the dataset, around 57\% is classified as normal fetal health}
+\caption{Class imbalance in the dataset, around 78\% is classified as normal fetal health}
 \label{fig:imbalance}
 \end{figure}
 
@@ -243,7 +243,7 @@ The results of our models are reported in Fig \ref{fig:fulldataset}. It's visibl
   \label{fig:fulldataset}
 \end{figure}
 
-\noindent From a brief analysis we can clearly see that SVM in general works pretty well over our dataset, Naive Bayes, Logistic Regression and SVM with sigmoid kernel are pretty bad in terms of precision for \textbf{suspicious} and \textbf{pathologic}. In general the class \textbf{Normal} has better performances due to the class imbalance (more than 50\%). Moreover in Fig \ref{fig:confusion_svm} the confusion matrix for the svm with rbf kernel is reported and in Fig \ref{fig:confusion_bayes}. What is clearly visible is the fact that for SVM with rbf there are close to zero false positive and false negative values which is a pretty good result. For Naive Bayes we have a false negative value which is even higher than the true value which is pretty bad for our classification problem.
+\noindent From a brief analysis we can clearly see that SVM in general works pretty well over our dataset, Naive Bayes, Logistic Regression and SVM with sigmoid kernel are pretty bad in terms of precision for \textbf{suspicious} and \textbf{pathologic}. In general the class \textbf{Normal} has better performances due to the class imbalance (more than 78\%). Moreover in Fig \ref{fig:confusion_svm} the confusion matrix for the svm with rbf kernel is reported and in Fig \ref{fig:confusion_bayes}. What is clearly visible is the fact that for SVM with rbf there are close to zero false positive and false negative values which is a pretty good result. For Naive Bayes we have a false negative value which is even higher than the true value which is pretty bad for our classification problem.
 
 \begin{figure}[H]
   \begin{center}
@@ -364,10 +364,29 @@ In this section an evaluation of our models over a subset of features defined in
 \noindent Finally it's visible from the report that the class imbalance plays again an important role and the f1-score for the \textbf{Suspicious} class is very low if compared with the other two classes. Anyway we showed how using a lower number of features we are still able to get pretty good results and having a good confusion matrix (very low number of false positive an negative).
 
 \subsubsection{Semisupervised Problem}
+In this section the semisupervised problem is briefly approached using a simple pseudo labelling method. We are going to use 100 samples per each class. The results for the semisupervised problem are reported in Fig \ref{fig:semi}, the results for the fully supervised problem are reported in Fig \ref{fig:fully}  
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=1.0\textwidth]{images/semi.png}
+  \end{center}
+  \caption{Classification report for the semisupervised problem using OneVsOne SVM with linear kernel}
+  \label{fig:semi}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=1.0\textwidth]{images/fully.png}
+  \end{center}
+  \caption{Classification report for the fully supervised problem using OneVsOne SVM with linear kernel}
+  \label{fig:fully}
+\end{figure}
+
+\noindent What is clearly visible is the fact that using a semisupervised approach we have less precision with the second class \textbf{Suspicious} due to the strong class imbalance. In fact we are introducing some false negatives that are visible in the confusion matrix.
 
 \section{Conclusion}
 
-In this report the study of the classification health of the fetal has been analysed using a real dataset. Several different models have been analysed using different metrics and different dimensionality reduction methodology. It is showed how using SVM with rbf kernel and 17 PCA components produces the best results. Finally, several other classification methods has been exploited and compared using different metrics.
+In this report the study of the classification health of the fetal has been analysed using a real dataset. Several different models have been analysed using different metrics and different dimensionality reduction methodology. It is showed how using SVM with rbf kernel and 17 PCA components produces the best results. Finally, several other classification methods has been exploited and compared using different metrics. 
 
 \newpage
 \begin{thebibliography}{9}

@@ -6,3 +6,4 @@ explorations/
 *.fls
 *.fdb_latexmk
 .ipynb_checkpoints/
+fetal_health-checkpoint.ipynb
