@@ -317,7 +317,16 @@ class NeuralNet(nn.Module):
       return out
 \end{Verbatim}
 
-\noindent The MLP uses one fully connected layer, a ReLU as activation function and another fully connected layer (Linear). This models proved to have an accuracy around 91\% which makes it a good model for the classification task. In Fig \ref{fig:anntrain} the train accuracies and losses are reported.
+\noindent The MLP uses one fully connected layer, a ReLU as activation function and another fully connected layer (Linear). This models proved to have an accuracy around 91\% which makes it a good model for the classification task as reported in Fig \ref{fig:annres}. In Fig \ref{fig:anntrain} the train accuracies and losses are reported.
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=0.6\textwidth]{images/ann_res.png}
+  \end{center}
+  \caption{Results of the MPL network}
+  \label{fig:annres}
+\end{figure}
+
 
 \begin{figure}[H]
   \begin{center}
@@ -326,9 +335,6 @@ class NeuralNet(nn.Module):
   \caption{Accuracy and losses of the MLP}
   \label{fig:anntrain}
 \end{figure}
-
-\subsubsection{Convolutional Neural Network CNN}
-In this section the use of CNN for solving the classification problem is brief introduced 
 
 \subsection{Other Exploratory Tasks}
 
