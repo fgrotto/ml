@@ -57,11 +57,10 @@ The classification problem is addressed using the following techniques:
   \item KNN (with different k based on preliminary analysis) \cite{ml}
   \item ANN \cite{ann}
 \end{itemize}
-Moreover, PCA and Fisher (LDA) dimensionality reduction techniques are considered as well as the effects of data scaling and/or normalization. We don't expect to see improvements of the state of the art where other techniques (XGBoost, Random forests, Decision tree models) are used.
-
+Moreover, PCA and Fisher (LDA) dimensionality reduction techniques are considered as well as the effects of data scaling and/or normalization. Finally some exploration tasks are reported such as the use of a subset of features according to statistical correlation and a brief analysis of the semi-supervised problem.
 \section{Experiments and Results}
 \subsection{Dataset exploration}
-The dataset is composed by 2126 entries with 22 features (21 feature + fetal health which is our target for the classification). From a first analysis there are no null or empty values but there are 13 duplications which we dropped. A brief description of the dataset is reported in Fig \ref{fig:features}.
+The dataset is composed by 2126 entries with 22 features (21 features + fetal health which is our target for the classification). From a first analysis there are no null or empty values but there are 13 duplications which we dropped. A brief description of the dataset is reported in Fig \ref{fig:features}.
 
 \begin{figure}[H]
 \begin{center}
@@ -85,15 +84,37 @@ The dataset is composed by 2126 entries with 22 features (21 feature + fetal hea
 \bigbreak
 \begin{itemize}
   \item \textbf{Precision}
-  \item \textbf{Accuracy}
+  \item \textbf{Accuracy} 
   \item \textbf{Recall}
-  \item \textbf{Confusion Matrix}
   \item \textbf{F1 Score}
+  \item \textbf{Confusion Matrix}
 \end{itemize}
 
 \bigbreak
-\noindent Finally we can analyse the correlation between features of the dataset in order to evaluate a possible subset to improve our performances.
-In Fig \ref{fig:correlation} a heatmap is reported with the correlation between our features. In table \ref{tab:correlation} the features with more than 30\% correlation with \textbf{fetal health} are reported
+\noindent
+Moreover in order to deal with the class imbalance several options are possible:
+\begin{itemize}
+  \item Oversampling the dataset 
+  \item Undersampling the dataset
+  \item Use different weights in the classification
+\end{itemize}
+\bigbreak
+\noindent In this context \textbf{oversampling} was evaluated as the best approach for this project since the dataset for the minority class is pretty limited and classifiers with different weights are not extremely performant (the \textbf{Suspicious} class had no precision at all) and it's difficult to estimate correct values of the weights.
+
+\bigbreak
+\noindent In Fig \ref{fig:hist} an histogram for each feature is provided. We could clearly see that at least 8 features are extremely skewed and contain a significant amount of outliers. In order to assure a flawless performance of the classifiers models we will scale every feature by standardization.
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=1.0\textwidth]{images/hist.png}
+  \end{center}
+  \caption{Histogram of each feature}
+  \label{fig:hist}
+\end{figure}
+
+\bigbreak
+\noindent Finally we can analyse the correlation between features of the dataset in order to evaluate a possible subset to improve our performances. In table \ref{tab:correlation} the features with more than 30\% correlation with \textbf{fetal health} are reported.
+In Fig \ref{fig:correlation} a heatmap is reported with the correlation between our features.
 
 \begin{table}[H]
 \begin{tabular}{ |p{10cm}||p{3cm}| }
@@ -112,7 +133,7 @@ In Fig \ref{fig:correlation} a heatmap is reported with the correlation between 
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=1.0\textwidth]{images/correlation.png}
+  \includegraphics[width=0.9\textwidth]{images/correlation.png}
   \end{center}
   \caption{Correlation between features}
   \label{fig:correlation}
@@ -125,15 +146,14 @@ In Fig \ref{fig:notscaled} the original data is reported. It's visible that the 
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=0.8\textwidth]{images/not_scaledù.png}
+  \includegraphics[width=0.7\textwidth]{images/not_scaledù.png}
   \end{center}
   \caption{Plot of the original data without scaling}
   \label{fig:notscaled}
 \end{figure}
-
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=0.8\textwidth]{images/scaled.png}
+  \includegraphics[width=0.7\textwidth]{images/scaled.png}
   \end{center}
   \caption{Plot of the scaled data}
   \label{fig:scaled}
@@ -152,30 +172,29 @@ In Fig \ref{fig:notscaled} the original data is reported. It's visible that the 
   \label{fig:pca}
 \end{figure}
 
-\noindent In particular the last five components don't provide much more information (close to zero) and with 8 components we have a representation of around 80\% of our dataset. In table \ref{tab:pca} the results obtained by our models over the 8 components is provided.
+\noindent In particular the last five components don't provide much more information (close to zero) and with 6 components we have a representation of around 80\% of our dataset. In table \ref{tab:pca} the results obtained by our models over the 6 components is briefly reported to get an idea of the performances.
 
 \begin{table}[H]
   \begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
     \hline
     Model& accuracy & precision  &  recall & f1 score \\
     \hline
-SVM linear&           0.899687&   0.898669&  0.899687&  0.899022\\
-SVM poly   &          0.891850&   0.885607&  0.891850&  0.885699\\
-SVM rbf     &         0.905956&   0.902835&  0.905956&  0.903968\\
-SVM sigmoid  &        0.717868&   0.765628&  0.717868&  0.737608\\
-Gaussian Naive  &        0.862069&   0.865387&  0.862069&  0.861556\\
-Logistic Regression&  0.899687&   0.897470&  0.899687&  0.898194\\
+    SVM linear           &0.818792&   0.823341&  0.818792&  0.820200\\
+    SVM poly             &0.847651&   0.856942&  0.847651&  0.849789\\
+    SVM rbf              &0.851678&   0.863157&  0.851678&  0.853885\\
+    SVM sigmoid          &0.722819&   0.725679&  0.722819&  0.723402\\
+    Gaussian NB          &0.775839&   0.797311&  0.775839&  0.778650\\
     \hline
   \end{tabular}
-  \caption{Evaluation of our models over 8 PCA components}
+  \caption{Evaluation of our models over 6 PCA components}
   \label{tab:pca}
   \end{table}
 
 \newpage
 \subsection{LDA dimensionality reduction}
 
-In this section a brief analysis of Linear Discriminant Analysis is reported in Fig \ref{fig:lda} where we can easily see that the cumulative variance ratio accumulated with 1 component rappresents more than 80\% of our dataset
-Moreover, both the case with 1 and 2 components are reported in the two tables \ref{tab:lda1} and \ref{tab:lda2}. 
+In this section a brief analysis of Linear Discriminant Analysis is reported in Fig \ref{fig:lda} where we can easily see that the cumulative variance ratio accumulated with 1 component rappresents more than 80\% of our dataset.
+Moreover, both the case with 1 and 2 components are briefly reported in table \ref{tab:lda1} and \ref{tab:lda2} to get an idea of the performances. 
 
 \begin{figure}[H]
   \begin{center}
@@ -191,12 +210,11 @@ Moreover, both the case with 1 and 2 components are reported in the two tables \
   \hline
   Model& accuracy & precision  &  recall & f1 score \\
   \hline
-  SVM linear&           0.847962&   0.829295&  0.847962&  0.828071\\
-  SVM poly  &           0.841693&   0.820448&  0.841693&  0.802800\\
-  SVM rbf   &           0.846395&   0.832120&  0.846395&  0.836413\\
-  SVM sigmoid &         0.766458&   0.776691&  0.766458&  0.771115\\
-  Gaussian Naive  &        0.854232&   0.847738&  0.854232&  0.850451\\
-  Logistic Regression & 0.844828&   0.828893&  0.844828&  0.832487\\
+  SVM linear           &0.773154&   0.775784&  0.773154&  0.774252\\
+  SVM poly             &0.755034&   0.791533&  0.755034&  0.761348\\
+  SVM rbf              &0.779195&   0.787309&  0.779195&  0.781934\\
+  SVM sigmoid          &0.698658&   0.714204&  0.698658&  0.703990\\
+  Gaussian NB          &0.768456&   0.768600&  0.768456&  0.768378\\
   \hline
 \end{tabular}
 \caption{Evaluation of our models with 1 LDA component}
@@ -208,12 +226,11 @@ Moreover, both the case with 1 and 2 components are reported in the two tables \
   \hline
   Model& accuracy & precision  &  recall & f1 score \\
   \hline
-  SVM linear &          0.898119&   0.898106&  0.898119&  0.898103\\
-  SVM poly   &          0.899687&   0.895180&  0.899687&  0.894518\\
-  SVM rbf    &          0.905956&   0.907072&  0.905956&  0.906281\\
-  SVM sigmoid &         0.689655&   0.725761&  0.689655&  0.704979\\
-  Gaussian Naive &         0.873041&   0.885894&  0.873041&  0.877463\\
-  Logistic Regression&  0.902821&   0.898863&  0.902821&  0.899858\\
+  SVM linear           &0.846309&   0.855568&  0.846309&  0.848366\\
+  SVM poly             &0.840940&   0.876105&  0.840940&  0.844297\\
+  SVM rbf              &0.860403&   0.876728&  0.860403&  0.862739\\
+  SVM sigmoid          &0.755034&   0.754202&  0.755034&  0.754471\\
+  Gaussian NB          &0.835570&   0.850102&  0.835570&  0.838258\\
   \hline
 \end{tabular}
 \caption{Evaluation of our models with 2 LDA components}
@@ -221,18 +238,18 @@ Moreover, both the case with 1 and 2 components are reported in the two tables \
 \end{table}
 
 
-\noindent In general in case of uniformly distributed data, LDA almost always performs better than PCA. However if the data is highly skewed (irregularly distributed) then it is advised to use PCA since LDA can be biased towards the majority class.
+\noindent In general in case of uniformly distributed data, LDA almost always performs better than PCA. However if the data is highly skewed (irregularly distributed), like in our scenario, then it is advised to use PCA since LDA can be biased towards the majority class. \cite{pca-lda}
 
 \newpage
 \subsection{Model evaluations with the full dataset}
 
-In this section the evaluations of several models are presented. For all of the the dataset has been divided using $train\_test\_split$ function from sklearn using around 30\% of the entire dataset for the testing set. 
+In this section the evaluations of several models are presented. The entire dataset is oversampled using $SMOTE$ and then it is partitioned using $train\_test\_split$ function from sklearn using around 30\% of the entire dataset for the testing set. 
 The results of our models are reported in Fig \ref{fig:fulldataset}. It's visible that SVM with rbf kernel produces the best results over our dataset. This is coherent with the analysis in \cite{ml} and what the literature provides us about Support Vector Machines Kernels. Let's consider:
 \bigbreak
 \begin{itemize}
-  \item 1.0 is Normal class
-  \item 2.0 is Suspicious class
-  \item 3.0 is Pathologic class
+  \item 1.0 is Normal class (520 samples in the testing set)
+  \item 2.0 is Suspicious class (485 samples in the testing set)
+  \item 3.0 is Pathologic class (485 samples in the testing set)
 \end{itemize} 
 
 \begin{figure}[H]
@@ -243,7 +260,7 @@ The results of our models are reported in Fig \ref{fig:fulldataset}. It's visibl
   \label{fig:fulldataset}
 \end{figure}
 
-\noindent From a brief analysis we can clearly see that SVM in general works pretty well over our dataset, Naive Bayes, Logistic Regression and SVM with sigmoid kernel are pretty bad in terms of precision for \textbf{suspicious} and \textbf{pathologic}. In general the class \textbf{Normal} has better performances due to the class imbalance (more than 78\%). Moreover in Fig \ref{fig:confusion_svm} the confusion matrix for the svm with rbf kernel is reported and in Fig \ref{fig:confusion_bayes}. What is clearly visible is the fact that for SVM with rbf there are close to zero false positive and false negative values which is a pretty good result. For Naive Bayes we have a false negative value which is even higher than the true value which is pretty bad for our classification problem.
+\noindent From a brief analysis we can clearly see that SVM in general works pretty well over our dataset, Naive Bayes and SVM with sigmoid kernel are pretty bad in terms of precision for \textbf{suspicious} and \textbf{pathologic}. In general the class \textbf{Normal} has better performances. Moreover in Fig \ref{fig:confusion_svm} and Fig \ref{fig:confusion_bayes} the confusion matrixes for the svm with rbf kernel and Naive Bayes are respectively reported. What is clearly visible is the fact that for SVM with rbf there are few false positive and false negative values which is a pretty good result. For Naive Bayes we have a false negative value which is even higher than the true value which is pretty bad for our classification problem. In fact, in the real context, we can't accept to misclassify a suspicious element with a normal one but we can easily accept the opposite (false positive).
 
 \begin{figure}[H]
   \begin{center}
@@ -272,24 +289,19 @@ In this section we will consider the use of K-NN (with an euclidean distance app
   \label{fig:knn}
 \end{figure}
 
-\noindent As a result the values K = 2 and K = 4 are the best choices which is very close to what the literature provides use which is $\sqrt{N}$ where $N$ is the number of features. In this case $\sqrt{21} = 4.6$ which is pretty close to what we get from the practical analysis. In Table \ref{tab:knnres} the two best cases are considered and analysed.
+\noindent As a result the values K = 2 and K = 4 are the best choices which is very close to what the literature suggests which is $\sqrt{N}$ where $N$ is the number of features. In this case $\sqrt{21} = 4.6$ which is pretty close to what we get from the practical analysis. In Fig \ref{fig:knn2} the best case is considered and analysed.
 
-\begin{table}[H]
-\begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
-  \hline
-  Model& accuracy & precision  &  recall & f1 score \\
-  \hline
-  K-NN with k=2 &          0.90&   0.90&  0.90&  0.89\\
-  K-NN with k=4   &          0.91&   0.91&  0.91&  0.91\\
-  \hline
-\end{tabular}
-\caption{Evaluation of K-NN models}
-\label{tab:knnres}
-\end{table}
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=0.9\textwidth]{images/knn2res.png}
+  \end{center}
+  \caption{K-NN with k=2 metrics and confusion matrix}
+  \label{fig:knn2}
+\end{figure}
 
-\noindent As a conclusion K-NN with k=4 or k=2 are great models for our analysis
 
-\newpage
+\noindent As a conclusion K-NN with k=2 is a good model with few false positive. However the dataset is pretty limited so K-NN is suitable in this case but it might be extremely data intensive for large datasets.
+
 \subsubsection{Artificial Neural Networks MLP}
 In this section we will brief provide some results obtained by using Artificial Neural Networks to solve the classification problem. In particular we created a multilayer perceptron (MLP) with the following parameters
 \begin{Verbatim}[fontsize=\small]
@@ -317,13 +329,13 @@ class NeuralNet(nn.Module):
       return out
 \end{Verbatim}
 
-\noindent The MLP uses one fully connected layer, a ReLU as activation function and another fully connected layer (Linear). This models proved to have an accuracy around 91\% which makes it a good model for the classification task as reported in Fig \ref{fig:annres}. In Fig \ref{fig:anntrain} the train accuracies and losses are reported.
+\noindent The MLP uses one fully connected layer, a ReLU as activation function and another fully connected layer (Linear). The criterion used is CrossEntropyLoss. This model have an accuracy of around 96\% which makes it a good model for the classification task as reported in Fig \ref{fig:annres}. In Fig \ref{fig:anntrain} the train accuracies and losses are reported.
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=0.6\textwidth]{images/ann_res.png}
+  \includegraphics[width=1.0\textwidth]{images/ann_res.png}
   \end{center}
-  \caption{Results of the MPL network}
+  \caption{Results of the MLP network}
   \label{fig:annres}
 \end{figure}
 
@@ -340,19 +352,18 @@ class NeuralNet(nn.Module):
 
 \subsubsection{Models evaluation using a subset of features}
 
-In this section an evaluation of our models over a subset of features defined in the previous section is presented. Only features with more than 30\% correlation with the target \textbf{fetal health} are used. They are reported in Table \ref{tab:correlation}. In Table \ref{tab:subset} the evaluation of our models is reported according to the defined metrics. Moreover, in Fig \ref{fig:poly} the classification report for the best model SVM poly is reported.
+In this section an evaluation of our models over a subset of features defined in the previous section is presented. Only features with more than 30\% correlation with the target \textbf{fetal health} are used. They are reported in Table \ref{tab:correlation}. In Table \ref{tab:subset} the evaluations of our models are reported according to the defined metrics. Moreover, in Fig \ref{fig:poly} the classification report for the best model SVM rbf is reported.
 
 \begin{table}[H]
 \begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
   \hline
   Model& accuracy & precision  &  recall & f1 score \\
   \hline
-  SVM linear &          0.85&   0.85&  0.84&  0.85\\
-  SVM poly   &          0.90&   0.90&  0.90&  0.90\\
-  SVM rbf    &          0.88&   0.88&  0.88&  0.88\\
-  SVM sigmoid &         0.82&   0.82&  0.82&  0.82\\
-  Gaussian Naive &         0.84&   0.84&  0.86&  0.84\\
-  Logistic Regression&  0.88&   0.88&  0.88&  0.88\\
+  SVM linear &          0.76&   0.76&  0.76&  0.76\\
+  SVM poly   &          0.82&   0.84&  0.82&  0.82\\
+  SVM rbf    &          0.85&   0.85&  0.85&  0.85\\
+  SVM sigmoid &         0.56&   0.57&  0.55&  0.56\\
+  Gaussian Naive &         0.73&   0.77&  0.73&  0.73\\
   \hline
 \end{tabular}
 \caption{Evaluation of our models over a subset of features}
@@ -361,22 +372,22 @@ In this section an evaluation of our models over a subset of features defined in
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=1.0\textwidth]{images/svm_poly.png}
+  \includegraphics[width=1.0\textwidth]{images/svm_rbf_corr.png}
   \end{center}
-  \caption{Detailed classification report for SVM with polynomial kernel}
+  \caption{Detailed classification report for SVM with rbf kernel}
   \label{fig:poly}
 \end{figure}
 
-\noindent Finally it's visible from the report that the class imbalance plays again an important role and the f1-score for the \textbf{Suspicious} class is very low if compared with the other two classes. Anyway we showed how using a lower number of features we are still able to get pretty good results and having a good confusion matrix (very low number of false positive an negative).
+\noindent Not all the confusion matrixes are reported but both Gaussian Naive and SVM with sigmoid have severe problems in distinguish the two classes \textbf{Suspicious} and \textbf{Pathologic} since they report a lot of false positives and negatives. Anyway we showed how, using a lower number of features, we are still able to get pretty good results with a SVM with rbf and have a decent confusion matrix (low number of false positive an negative) even though it's not as good as using all the features. This is a reasonable result given the fact that the correlation was pretty low around 30\%
 
 \subsubsection{Semisupervised Problem}
-In this section the semisupervised problem is briefly approached using a simple pseudo labelling method. We are going to use 100 samples per each class. The results for the semisupervised problem are reported in Fig \ref{fig:semi}, the results for the fully supervised problem are reported in Fig \ref{fig:fully}  
+In this section the semisupervised problem is briefly approached using a simple pseudo labelling method using the SVM rbf which proved to be one of the best classifier for this scenario. We use 100 samples per each class to build the labeled training dataset. We train the classifier with that labeled dataset (300,21) and then we predict the pseudo labels from the unlabeled part of the dataset (3175, 21). We combine the two results and we train a classifier using the full training dataset (with the true labels and the pseudo labels). Finally we predict the test dataset. The results for the semisupervised problem are reported in Fig \ref{fig:semi}, the results for the fully supervised problem are reported in Fig \ref{fig:fully}  
 
 \begin{figure}[H]
   \begin{center}
   \includegraphics[width=1.0\textwidth]{images/semi.png}
   \end{center}
-  \caption{Classification report for the semisupervised problem using OneVsOne SVM with linear kernel}
+  \caption{Classification report for the semisupervised problem using OneVsOne SVM with rbf kernel}
   \label{fig:semi}
 \end{figure}
 
@@ -384,17 +395,18 @@ In this section the semisupervised problem is briefly approached using a simple 
   \begin{center}
   \includegraphics[width=1.0\textwidth]{images/fully.png}
   \end{center}
-  \caption{Classification report for the fully supervised problem using OneVsOne SVM with linear kernel}
+  \caption{Classification report for the fully supervised problem using OneVsOne SVM with rbf kernel}
   \label{fig:fully}
 \end{figure}
 
-\noindent What is clearly visible is the fact that using a semisupervised approach we have less precision with the second class \textbf{Suspicious} due to the strong class imbalance. In fact we are introducing some false negatives that are visible in the confusion matrix.
-
-\section{Conclusion}
-
-In this report the study of the classification health of the fetal has been analysed using a real dataset. Several different models have been analysed using different metrics and different dimensionality reduction methodology. It is showed how using SVM with rbf kernel and 17 PCA components produces the best results. Finally, several other classification methods has been exploited and compared using different metrics. 
+\noindent What is clearly visible is the fact that using a semisupervised approach we have less precision with the second class \textbf{Suspicious} and we are introducing some false negatives/positives that are visible in the confusion matrix. For real application this is not recommended since false positive should be avoided as much as possible. Several configurations have been tried using more samples per each class or even lower number of samples (100 samples per class got reasonable results)
 
 \newpage
+\section{Conclusion}
+
+In this report the study of fetal health classification has been addressed using a real dataset. Several different models have been analysed using different metrics and different dimensionality reduction methodologies. We showed how SVM with rbf kernel, K-NN with k=2 and MLP produce really reasonable results but they still have some problems in terms of false positives/negatives with the suspicious/normal classification. Finally, it's important to mention that we didn't reach improvements of the state of the art where other more advanced techniques (XGBoost, Random forests, Decision tree models, CNN) are used. \cite{ann} \cite{cnn}
+
+
 \begin{thebibliography}{9}
 \bibitem{cardio}
 Ayres de Campos et al. (2000) SisPorto 2.0 A Program for Automated Analysis of Cardiotocograms
@@ -410,6 +422,12 @@ Hoodbhoy, Zahra et al. “Use of Machine Learning Algorithms for Prediction of F
 
 \bibitem{ann}
 Yılmaz, E. Fetal State Assessment from Cardiotocogram Data Using Artificial Neural Networks.
+
+\bibitem{pca-lda}
+Aleix M. Martinez and Avinash C. Kak PCA versus LDA
+
+\bibitem{cnn}
+Jianqiang Li , Zhuang-Zhuang Chen, Luxiang Huang, Min Fang, Bing Li, Xianghua Fu, Huihui Wang Automatic Classification of Fetal Heart Rate Based on Convolutional Neural Network
 
 \end{thebibliography}
 \end{document}
