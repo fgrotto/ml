@@ -40,8 +40,9 @@ In light of what was mentioned above, Cardiotocograms (CTGs) are a simple and co
 \end{quote}
 In this context this project is not only an application of machine learning techniques but it also have some meaningful application into real world scenarios thanks to the real data provided.
 
+\section{State of Art}
 
-\section{Problem definition and Dataset}
+\section{Objective (Problem definition and Dataset)}
 The dataset comes from UCI Machine Learning Repository \cite{uci} and it is composed by 
 \begin{quote}
 2126 fetal cardiotocograms (CTGs) automatically processed with the respective diagnostic features measured. The CTGs are were classified by three expert obstetricians and a consensus classification label assigned to each of them. Classification was both with respect to a morphologic pattern (A, B, C. ...) and to a fetal state (N=normal; S=suspect; P=pathologic). Therefore the dataset can be used either for 10-class or 3-class experiments.
@@ -244,7 +245,7 @@ Moreover, both the case with 1 and 2 components are briefly reported in table \r
 \subsection{Model evaluations with the full dataset}
 
 In this section the evaluations of several models are presented. The entire dataset is oversampled using $SMOTE$ and then it is partitioned using $train\_test\_split$ function from sklearn using around 30\% of the entire dataset for the testing set. 
-The results of our models are reported in Fig \ref{fig:fulldataset}. It's visible that SVM with rbf kernel produces the best results over our dataset. This is coherent with the analysis in \cite{ml} and what the literature provides us about Support Vector Machines Kernels. Let's consider:
+The results of our models are reported in Fig \ref{fig:fulldataset}. It's visible that SVM with rbf kernel produces the best results over our dataset. This is coherent with the analysis in \cite{ml} and what the literature provides us about Support Vector Machines Kernels. All models use as default OneVsRest approach. Let's consider:
 \bigbreak
 \begin{itemize}
   \item 1.0 is Normal class (520 samples in the testing set)
@@ -289,7 +290,7 @@ In this section we will consider the use of K-NN (with an euclidean distance app
   \label{fig:knn}
 \end{figure}
 
-\noindent As a result the values K = 2 and K = 4 are the best choices which is very close to what the literature suggests which is $\sqrt{N}$ where $N$ is the number of features. In this case $\sqrt{21} = 4.6$ which is pretty close to what we get from the practical analysis. In Fig \ref{fig:knn2} the best case is considered and analysed.
+\noindent As a result the values K = 2 and K = 4 are the best choices. In Fig \ref{fig:knn2} the best case is considered and analysed.
 
 \begin{figure}[H]
   \begin{center}
@@ -378,7 +379,7 @@ In this section an evaluation of our models over a subset of features defined in
   \label{fig:poly}
 \end{figure}
 
-\noindent Not all the confusion matrixes are reported but both Gaussian Naive and SVM with sigmoid have severe problems in distinguish the two classes \textbf{Suspicious} and \textbf{Pathologic} since they report a lot of false positives and negatives. Anyway we showed how, using a lower number of features, we are still able to get pretty good results with a SVM with rbf and have a decent confusion matrix (low number of false positive an negative) even though it's not as good as using all the features. This is a reasonable result given the fact that the correlation was pretty low around 30\%
+\noindent Not all the confusion matrixes are reported but both Gaussian Naive and SVM with sigmoid have severe problems in distinguish the two classes \textbf{Suspicious} and \textbf{Normal} since they report a lot of false positives and negatives. Anyway we showed how, using a lower number of features, we are still able to get pretty good results with a SVM with rbf and have a decent confusion matrix (low number of false positive an negative) even though it's not as good as using all the features. This is a reasonable result given the fact that the correlation was pretty low around 30\%
 
 \subsubsection{Semisupervised Problem}
 In this section the semisupervised problem is briefly approached using a simple pseudo labelling method using the SVM rbf which proved to be one of the best classifier for this scenario. We use 100 samples per each class to build the labeled training dataset. We train the classifier with that labeled dataset (300,21) and then we predict the pseudo labels from the unlabeled part of the dataset (3175, 21). We combine the two results and we train a classifier using the full training dataset (with the true labels and the pseudo labels). Finally we predict the test dataset. The results for the semisupervised problem are reported in Fig \ref{fig:semi}, the results for the fully supervised problem are reported in Fig \ref{fig:fully}  
