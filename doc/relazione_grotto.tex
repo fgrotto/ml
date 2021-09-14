@@ -370,14 +370,14 @@ In this section an evaluation of our models over a subset of features defined in
   \label{fig:poly}
 \end{figure}
 
-\noindent Not all the confusion matrixes are reported but both Gaussian Naive and SVM with sigmoid have severe problems in distinguish the two classes \textbf{Suspicious} and \textbf{Normal} since they report a lot of false positives and negatives. Anyway we showed how, using a lower number of features, we are still able to get pretty good results with a SVM with rbf and have a decent confusion matrix (low number of false positive an negative) even though it's not as good as using all the features. This is a reasonable result given the fact that the correlation was pretty low around 30\%
+\noindent Not all the confusion matrixes are reported but both Gaussian Naive and SVM with sigmoid have severe problems in distinguish the two classes \textbf{Suspicious} and \textbf{Normal} since they report a lot of false positives and negatives. Anyway we showed how, using a lower number of features, we are still able to get pretty good results with a SVM with rbf and have a decent confusion matrix (low number of false positive and negative) even though it's not as good as using all the features. This is a reasonable result given the fact that the correlation was pretty low around 30\%.
 
 \subsubsection{Semisupervised Problem}
 In this section the semisupervised problem is briefly approached using a simple pseudo labelling method using the SVM rbf which proved to be one of the best classifier for this scenario. We use 100 samples per each class to build the labeled training dataset. We train the classifier with that labeled dataset (300,21) and then we predict the pseudo labels from the unlabeled part of the dataset (4515, 21). We combine the two results and we train a classifier using the full training dataset (with the true labels and the pseudo labels). Finally we predict the test dataset. The results for the semisupervised problem are reported in Fig \ref{fig:semi}, the results for the fully supervised problem are reported in Fig \ref{fig:fully}  
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=0.9\textwidth]{images/semi.png}
+  \includegraphics[width=0.8\textwidth]{images/semi.png}
   \end{center}
   \caption{Classification report for the semisupervised problem using OneVsOne SVM with rbf kernel}
   \label{fig:semi}
@@ -385,7 +385,7 @@ In this section the semisupervised problem is briefly approached using a simple 
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=0.9\textwidth]{images/fully.png}
+  \includegraphics[width=0.8\textwidth]{images/fully.png}
   \end{center}
   \caption{Classification report for the fully supervised problem using OneVsOne SVM with rbf kernel}
   \label{fig:fully}
