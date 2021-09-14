@@ -38,7 +38,7 @@ Parallel to notion of child mortality is of course maternal mortality, which acc
 
 In light of what was mentioned above, Cardiotocograms (CTGs) are a simple and cost accessible option to assess fetal health, allowing healthcare professionals to take action in order to prevent child and maternal mortality. The equipment itself works by sending ultrasound pulses and reading its response, thus shedding light on fetal heart rate (FHR), fetal movements, uterine contractions and more.
 \end{quote}
-In this context this project is not only an application of machine learning techniques but it also have some meaningful application into real world scenarios thanks to the real data provided.
+In this context this project is not only an application of machine learning techniques but it also have a meaningful application into real world scenarios thanks to the real data provided.
 
 \section{Brief State of Art}
 The analysis of CTGs data is an important task in order to reduce maternal mortality. In particular, the literature is rich of several different machine learning techniques used to address the classification problem. For example K-NN and SVM has been extensively used to solve this type of task with successful results \cite{ml}. Moreover, in recent years, other techniques has proved to improve performances as reported in \cite{ann} using ANN (Artifical Neural Networks), using CNN (Convolutional Neural Network) \cite{cnn} and using XGBoost classifiers \cite{ml}. For the purpose of this project we will address classical machine learning techniques with a brief introduction to ANN. 
@@ -46,7 +46,7 @@ The analysis of CTGs data is an important task in order to reduce maternal morta
 \section{Objective (Problem definition and Dataset)}
 The dataset comes from UCI Machine Learning Repository \cite{uci} and it is composed by 
 \begin{quote}
-2126 fetal cardiotocograms (CTGs) automatically processed with the respective diagnostic features measured. The CTGs are were classified by three expert obstetricians and a consensus classification label assigned to each of them. Classification was both with respect to a morphologic pattern (A, B, C. ...) and to a fetal state (N=normal; S=suspect; P=pathologic). Therefore the dataset can be used either for 10-class or 3-class experiments.
+2126 fetal cardiotocograms (CTGs) automatically processed with the respective diagnostic features measured. The CTGs were classified by three expert obstetricians and a consensus classification label assigned to each of them. Classification was both with respect to a morphologic pattern (A, B, C. ...) and to a fetal state (N=normal; S=suspect; P=pathologic). Therefore the dataset can be used either for 10-class or 3-class experiments.
 \end{quote}
 We will address the 3-class classification problem so we will try to classify the data according to normal, suspect or pathologic.
 
@@ -55,7 +55,7 @@ The classification problem is addressed using the following techniques:
 
 \begin{itemize}
   \item Naive Bayes \cite{ml}
-  \item SVM (with different kernels linear and RBF ) \cite{ml}
+  \item SVM (with different kernels) \cite{ml}
   \item KNN (with different k based on preliminary analysis) \cite{ml}
   \item ANN \cite{ann}
 \end{itemize}
@@ -101,7 +101,7 @@ Moreover in order to deal with the class imbalance several options are possible:
   \item Use different weights in the classification
 \end{itemize}
 \bigbreak
-\noindent In this context \textbf{oversampling} was evaluated as the best approach for this project since the dataset for the minority class is pretty limited and classifiers with different weights are not extremely performant (the \textbf{Suspicious} class had no precision at all) and it's difficult to estimate correct values of the weights.
+\noindent In this context \textbf{oversampling} was evaluated as the best approach for this project since the dataset for the minority class is pretty limited and classifiers with different weights are not extremely performant for this scenario and it's difficult to estimate correct values of the weights (this comes from some preliminary tests).
 
 \bigbreak
 \noindent In Fig \ref{fig:hist} an histogram for each feature is provided. We could clearly see that at least 8 features are extremely skewed and contain a significant amount of outliers. In order to assure a flawless performance of the classifiers models we will scale every feature by standardization.
@@ -174,7 +174,7 @@ In Fig \ref{fig:notscaled} the original data is reported. It's visible that the 
   \label{fig:pca}
 \end{figure}
 
-\noindent In particular the last five components don't provide much more information (close to zero) and with 6 components we have a representation of around 80\% of our dataset. In table \ref{tab:pca} the results obtained by our models over the 6 components is briefly reported to get an idea of the performances.
+\noindent In particular the last five components don't provide much more information (close to zero) and with 6 components we have a representation of around 80\% of our dataset. In table \ref{tab:pca} the results obtained by our models over the 6 components are briefly reported to get an idea of the performances.
 
 \begin{table}[H]
   \begin{tabular}{ |p{6cm}||p{2cm}|p{2cm}|p{2cm}|p{2cm}| }
@@ -195,7 +195,7 @@ In Fig \ref{fig:notscaled} the original data is reported. It's visible that the 
 \newpage
 \subsection{LDA dimensionality reduction}
 
-In this section a brief analysis of Linear Discriminant Analysis is reported in Fig \ref{fig:lda} where we can easily see that the cumulative variance ratio accumulated with 1 component rappresents more than 80\% of our dataset.
+In this section a brief analysis of Linear Discriminant Analysis is reported in Fig \ref{fig:lda} where we can easily see that the cumulative variance ratio accumulated with 1 component rappresents around 80\% of our dataset.
 Moreover, both the case with 1 and 2 components are briefly reported in table \ref{tab:lda1} and \ref{tab:lda2} to get an idea of the performances. 
 
 \begin{figure}[H]
@@ -240,13 +240,18 @@ Moreover, both the case with 1 and 2 components are briefly reported in table \r
 \end{table}
 
 
-\noindent In general in case of uniformly distributed data, LDA almost always performs better than PCA. However if the data is highly skewed (irregularly distributed), like in our scenario, then it is advised to use PCA since LDA can be biased towards the majority class. \cite{pca-lda}
+\noindent In general in case of uniformly distributed data, LDA almost always performs better than PCA. However if the data is highly skewed (irregularly distributed), like in our scenario, then it is advised to use PCA since LDA can be biased towards the majority class. \cite{pca-lda}. Finally, in this report the dimensionality reduction is actually not used since there are no benefits in having it as we will show in the following sections using all features for the classification task.
 
 \newpage
 \subsection{Model evaluations with the full dataset}
 
-In this section the evaluations of several models are presented. The training dataset is oversampled using $SMOTE$ and the test set is composed by 30\% of the minority class (50 samples) and the same amount of samples for the other two classes. In this way the testing dataset is balanced and the training dataset is oversampled for better training. This is a necessary step to deal with unbalanced classes and avoid metrics overestimations due to synthetic data in the testing set (the testing set must be real). 
+In this section the evaluations of several models are presented. The training dataset is oversampled using $SMOTE$ \cite{smote} and the test set is composed by 30\% of the minority class (50 samples) and the same amount of samples for the other two classes. In this way the testing dataset is balanced and the training dataset is oversampled for better training. This is a necessary step to deal with unbalanced classes and avoid metrics overestimations due to synthetic data in the testing set (the testing set must be real). 
 The results of our models are reported in Fig \ref{fig:fulldataset}. It's visible that SVM with rbf kernel produces the best results over our dataset. This is coherent with the analysis in \cite{ml} and what the literature provides us about Support Vector Machines Kernels. All models use as default OneVsRest approach. Let's consider:
+\begin{itemize}
+  \item 1.0 Normal
+  \item 2.0 Suspicious
+  \item 3.0 Pathologic
+\end{itemize}
 \bigbreak
 \begin{figure}[H]
   \begin{center}
@@ -325,7 +330,7 @@ class NeuralNet(nn.Module):
       return out
 \end{Verbatim}
 
-\noindent The MLP uses one fully connected layer, a ReLU as activation function and another fully connected layer (Linear). The criterion used is CrossEntropyLoss. This model have an accuracy of around 96\% which makes it a good model for the classification task as reported in Fig \ref{fig:annres}. In Fig \ref{fig:anntrain} the train accuracies and losses are reported.
+\noindent The MLP uses one fully connected layer, a ReLU as activation function and another fully connected layer (Linear). The criterion used is CrossEntropyLoss. This model have an accuracy of around 85\% which makes it a good model for the classification task as reported in Fig \ref{fig:annres}.
 
 \begin{figure}[H]
   \begin{center}
@@ -333,15 +338,6 @@ class NeuralNet(nn.Module):
   \end{center}
   \caption{Results of the MLP network}
   \label{fig:annres}
-\end{figure}
-
-
-\begin{figure}[H]
-  \begin{center}
-  \includegraphics[width=0.6\textwidth]{images/ann_train.png}
-  \end{center}
-  \caption{Accuracy and losses of the MLP}
-  \label{fig:anntrain}
 \end{figure}
 
 \subsection{Other Exploratory Tasks}
@@ -425,5 +421,7 @@ Aleix M. Martinez and Avinash C. Kak PCA versus LDA
 \bibitem{cnn}
 Jianqiang Li , Zhuang-Zhuang Chen, Luxiang Huang, Min Fang, Bing Li, Xianghua Fu, Huihui Wang Automatic Classification of Fetal Heart Rate Based on Convolutional Neural Network
 
+\bibitem{smote}
+Nitesh V. Chawla Kevin W. Bowyer Lawrence O. Hall W. Philip Kegelmeyer SMOTE: Synthetic Minority Over-sampling Technique
 \end{thebibliography}
 \end{document}
