@@ -157,7 +157,7 @@ In Fig \ref{fig:notscaled} the original data is reported. It's visible that the 
   \begin{center}
   \includegraphics[width=0.7\textwidth]{images/scaled.png}
   \end{center}
-  \caption{Plot of the scaled data}
+  \caption{Plot of the scaled training set}
   \label{fig:scaled}
 \end{figure}
 
@@ -181,11 +181,11 @@ In Fig \ref{fig:notscaled} the original data is reported. It's visible that the 
     \hline
     Model& accuracy & precision  &  recall & f1 score \\
     \hline
-    SVM linear           &0.818792&   0.823341&  0.818792&  0.820200\\
-    SVM poly             &0.847651&   0.856942&  0.847651&  0.849789\\
-    SVM rbf              &0.851678&   0.863157&  0.851678&  0.853885\\
-    SVM sigmoid          &0.722819&   0.725679&  0.722819&  0.723402\\
-    Gaussian NB          &0.775839&   0.797311&  0.775839&  0.778650\\
+    SVM linear           &0.813333&   0.821697&  0.813333&  0.814042\\
+    SVM poly             &0.820000&   0.826573&  0.820000&  0.820346\\
+    SVM rbf              &0.813333&   0.815441&  0.813333&  0.812814\\
+    SVM sigmoid          &0.660000&   0.661235&  0.660000&  0.659368\\
+    Gaussian NB          &0.753333&   0.774734&  0.753333&  0.756183\\
     \hline
   \end{tabular}
   \caption{Evaluation of our models over 6 PCA components}
@@ -212,11 +212,11 @@ Moreover, both the case with 1 and 2 components are briefly reported in table \r
   \hline
   Model& accuracy & precision  &  recall & f1 score \\
   \hline
-  SVM linear           &0.773154&   0.775784&  0.773154&  0.774252\\
-  SVM poly             &0.755034&   0.791533&  0.755034&  0.761348\\
-  SVM rbf              &0.779195&   0.787309&  0.779195&  0.781934\\
-  SVM sigmoid          &0.698658&   0.714204&  0.698658&  0.703990\\
-  Gaussian NB          &0.768456&   0.768600&  0.768456&  0.768378\\
+  SVM linear           &0.733333&   0.739409&  0.733333&  0.735703\\
+  SVM poly             &0.740000&   0.782873&  0.740000&  0.747160\\
+  SVM rbf              &0.766667&   0.788004&  0.766667&  0.771221\\
+  SVM sigmoid          &0.560000&   0.548726&  0.560000&  0.552469\\
+  Gaussian NB          &0.740000&   0.744999&  0.740000&  0.741770\\
   \hline
 \end{tabular}
 \caption{Evaluation of our models with 1 LDA component}
@@ -228,11 +228,11 @@ Moreover, both the case with 1 and 2 components are briefly reported in table \r
   \hline
   Model& accuracy & precision  &  recall & f1 score \\
   \hline
-  SVM linear           &0.846309&   0.855568&  0.846309&  0.848366\\
-  SVM poly             &0.840940&   0.876105&  0.840940&  0.844297\\
-  SVM rbf              &0.860403&   0.876728&  0.860403&  0.862739\\
-  SVM sigmoid          &0.755034&   0.754202&  0.755034&  0.754471\\
-  Gaussian NB          &0.835570&   0.850102&  0.835570&  0.838258\\
+  SVM linear           &0.800000&   0.810988&  0.800000&  0.801167\\
+  SVM poly             &0.786667&   0.833078&  0.786667&  0.791542\\
+  SVM rbf              &0.793333&   0.813034&  0.793333&  0.795674\\
+  SVM sigmoid          &0.693333&   0.694028&  0.693333&  0.693031\\
+  Gaussian NB          &0.793333&   0.815672&  0.793333&  0.796466\\
   \hline
 \end{tabular}
 \caption{Evaluation of our models with 2 LDA components}
@@ -245,15 +245,9 @@ Moreover, both the case with 1 and 2 components are briefly reported in table \r
 \newpage
 \subsection{Model evaluations with the full dataset}
 
-In this section the evaluations of several models are presented. The entire dataset is oversampled using $SMOTE$ and then it is partitioned using $train\_test\_split$ function from sklearn using around 30\% of the entire dataset for the testing set. 
+In this section the evaluations of several models are presented. The training dataset is oversampled using $SMOTE$ and the test set is composed by 30\% of the minority class (50 samples) and the same amount of samples for the other two classes. In this way the testing dataset is balanced and the training dataset is oversampled for better training. This is a necessary step to deal with unbalanced classes and avoid metrics overestimations due to synthetic data in the testing set (the testing set must be real). 
 The results of our models are reported in Fig \ref{fig:fulldataset}. It's visible that SVM with rbf kernel produces the best results over our dataset. This is coherent with the analysis in \cite{ml} and what the literature provides us about Support Vector Machines Kernels. All models use as default OneVsRest approach. Let's consider:
 \bigbreak
-\begin{itemize}
-  \item 1.0 is Normal class (520 samples in the testing set)
-  \item 2.0 is Suspicious class (485 samples in the testing set)
-  \item 3.0 is Pathologic class (485 samples in the testing set)
-\end{itemize} 
-
 \begin{figure}[H]
   \begin{center}
   \includegraphics[width=1.0\textwidth]{images/fulldataset.png}
@@ -262,7 +256,7 @@ The results of our models are reported in Fig \ref{fig:fulldataset}. It's visibl
   \label{fig:fulldataset}
 \end{figure}
 
-\noindent From a brief analysis we can clearly see that SVM in general works pretty well over our dataset, Naive Bayes and SVM with sigmoid kernel are pretty bad in terms of precision for \textbf{suspicious} and \textbf{pathologic}. In general the class \textbf{Normal} has better performances. Moreover in Fig \ref{fig:confusion_svm} and Fig \ref{fig:confusion_bayes} the confusion matrixes for the svm with rbf kernel and Naive Bayes are respectively reported. What is clearly visible is the fact that for SVM with rbf there are few false positive and false negative values which is a pretty good result. For Naive Bayes we have a false negative value which is even higher than the true value which is pretty bad for our classification problem. In fact, in the real context, we can't accept to misclassify a suspicious element with a normal one but we can easily accept the opposite (false positive).
+\noindent From a brief analysis we can clearly see that SVM in general works pretty well over our dataset, Naive Bayes and SVM with sigmoid kernel are pretty bad in terms of precision for \textbf{suspicious} and \textbf{pathologic}. In general the class \textbf{Normal} has better performances. Moreover in Fig \ref{fig:confusion_svm} and Fig \ref{fig:confusion_bayes} the confusion matrixes for the svm with rbf kernel and Naive Bayes are respectively reported. What is clearly visible is the fact that for SVM with rbf there are few false positive and false negative values for the normal class which is a pretty good result but not perfect. For Naive Bayes we have a total of false negative values which is close to the true value which is pretty bad for our classification problem. In fact, in the real context, we can't accept to misclassify a suspicious element with a normal one but we can easily accept the opposite.
 
 \begin{figure}[H]
   \begin{center}
@@ -291,18 +285,18 @@ In this section we will consider the use of K-NN (with an euclidean distance app
   \label{fig:knn}
 \end{figure}
 
-\noindent As a result the values K = 2 and K = 4 are the best choices. In Fig \ref{fig:knn2} the best case is considered and analysed.
+\noindent As a result the value K = 3 is the best choices. In Fig \ref{fig:knn2} the best case is considered and analysed.
 
 \begin{figure}[H]
   \begin{center}
   \includegraphics[width=0.9\textwidth]{images/knn2res.png}
   \end{center}
-  \caption{K-NN with k=2 metrics and confusion matrix}
+  \caption{K-NN with k=3 metrics and confusion matrix}
   \label{fig:knn2}
 \end{figure}
 
 
-\noindent As a conclusion K-NN with k=2 is a good model with few false positive. However the dataset is pretty limited so K-NN is suitable in this case but it might be extremely data intensive for large datasets.
+\noindent As a conclusion K-NN with k=3 is a good model with few false positive for the normal class but we still find some difficulties for the two classes suspicious and pathologic due to the low amount of data available. Moreover the dataset is pretty limited so K-NN is suitable in this case but it might be extremely data intensive for large datasets.
 
 \subsubsection{Artificial Neural Networks MLP}
 In this section we will brief provide some results obtained by using Artificial Neural Networks to solve the classification problem. In particular we created a multilayer perceptron (MLP) with the following parameters
@@ -362,10 +356,10 @@ In this section an evaluation of our models over a subset of features defined in
   Model& accuracy & precision  &  recall & f1 score \\
   \hline
   SVM linear &          0.76&   0.76&  0.76&  0.76\\
-  SVM poly   &          0.82&   0.84&  0.82&  0.82\\
-  SVM rbf    &          0.85&   0.85&  0.85&  0.85\\
-  SVM sigmoid &         0.56&   0.57&  0.55&  0.56\\
-  Gaussian Naive &         0.73&   0.77&  0.73&  0.73\\
+  SVM poly   &          0.81&   0.85&  0.81&  0.80\\
+  SVM rbf    &          0.82&   0.82&  0.82&  0.82\\
+  SVM sigmoid &         0.54&   0.53&  0.54&  0.51\\
+  Gaussian Naive &         0.73&   0.76&  0.73&  0.73\\
   \hline
 \end{tabular}
 \caption{Evaluation of our models over a subset of features}
@@ -374,7 +368,7 @@ In this section an evaluation of our models over a subset of features defined in
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=1.0\textwidth]{images/svm_rbf_corr.png}
+  \includegraphics[width=0.8\textwidth]{images/svm_rbf_corr.png}
   \end{center}
   \caption{Detailed classification report for SVM with rbf kernel}
   \label{fig:poly}
@@ -383,11 +377,11 @@ In this section an evaluation of our models over a subset of features defined in
 \noindent Not all the confusion matrixes are reported but both Gaussian Naive and SVM with sigmoid have severe problems in distinguish the two classes \textbf{Suspicious} and \textbf{Normal} since they report a lot of false positives and negatives. Anyway we showed how, using a lower number of features, we are still able to get pretty good results with a SVM with rbf and have a decent confusion matrix (low number of false positive an negative) even though it's not as good as using all the features. This is a reasonable result given the fact that the correlation was pretty low around 30\%
 
 \subsubsection{Semisupervised Problem}
-In this section the semisupervised problem is briefly approached using a simple pseudo labelling method using the SVM rbf which proved to be one of the best classifier for this scenario. We use 100 samples per each class to build the labeled training dataset. We train the classifier with that labeled dataset (300,21) and then we predict the pseudo labels from the unlabeled part of the dataset (3175, 21). We combine the two results and we train a classifier using the full training dataset (with the true labels and the pseudo labels). Finally we predict the test dataset. The results for the semisupervised problem are reported in Fig \ref{fig:semi}, the results for the fully supervised problem are reported in Fig \ref{fig:fully}  
+In this section the semisupervised problem is briefly approached using a simple pseudo labelling method using the SVM rbf which proved to be one of the best classifier for this scenario. We use 100 samples per each class to build the labeled training dataset. We train the classifier with that labeled dataset (300,21) and then we predict the pseudo labels from the unlabeled part of the dataset (4515, 21). We combine the two results and we train a classifier using the full training dataset (with the true labels and the pseudo labels). Finally we predict the test dataset. The results for the semisupervised problem are reported in Fig \ref{fig:semi}, the results for the fully supervised problem are reported in Fig \ref{fig:fully}  
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=1.0\textwidth]{images/semi.png}
+  \includegraphics[width=0.9\textwidth]{images/semi.png}
   \end{center}
   \caption{Classification report for the semisupervised problem using OneVsOne SVM with rbf kernel}
   \label{fig:semi}
@@ -395,7 +389,7 @@ In this section the semisupervised problem is briefly approached using a simple 
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=1.0\textwidth]{images/fully.png}
+  \includegraphics[width=0.9\textwidth]{images/fully.png}
   \end{center}
   \caption{Classification report for the fully supervised problem using OneVsOne SVM with rbf kernel}
   \label{fig:fully}
